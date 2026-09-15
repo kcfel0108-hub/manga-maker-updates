@@ -1,1 +1,8 @@
-
+{
+  "active": false,
+  "version": "7.25.1",
+  "channel": "stable",
+  "releaseNotes": [
+    "アップデート配信の準備が完了しました"
+  ]
+}
