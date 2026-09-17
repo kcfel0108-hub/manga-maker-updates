@@ -1,2 +1,2 @@
 ARTIST LIVE SHEET v0.6.0-beta.11 clean runtime deploy marker
-source-commit: dbbdf24e94e94c2a0e09b3715412917e958c880b
+source-commit: db7b579e23307f2ec897e6abc632ff196172e8b1
