@@ -41,6 +41,13 @@ RUN cat \
   && grep -q '0.6.0-beta.11' /app/server.mjs \
   && grep -q 'Real Setup' /app/public/app.js \
   && echo 'ARTIST LIVE SHEET beta11 clean runtime verified' \
+  && OLD_BASE='https://artist-live-sheet-staging-production.up.railway.app' \
+  && NEW_BASE='https://als-staging-github-production.up.railway.app' \
+  && grep -RIl "$OLD_BASE" /app/public /app/server.mjs | xargs -r sed -i "s|$OLD_BASE|$NEW_BASE|g" \
+  && ! grep -Rqs "$OLD_BASE" /app/public /app/server.mjs \
+  && grep -q "$NEW_BASE/sitemap.xml" /app/server.mjs \
+  && grep -q "$NEW_BASE/" /app/public/index.html \
+  && echo 'ARTIST LIVE SHEET public base URL synchronized' \
   && rm -rf /tmp/beta11parts /tmp/beta11-runtime-text.tgz.b64 /tmp/beta11-runtime-text.tgz
 
 # Stable binary assets are kept outside the text archive.
