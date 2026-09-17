@@ -2,19 +2,21 @@
 FROM node:22-alpine
 WORKDIR /app
 
-# Rebuild the exact beta.11 text runtime from Git-blob-verified segments.
-COPY beta11s.part00 beta11clean.part01 beta11clean.part02 beta11s.part03 beta11s.tail0 beta11clean.gap50a beta11clean.gap50b beta11clean.gap50c beta11s.tail1a beta11s.tail1b beta11s.tail1c beta11s.tail1d beta11s.tail1e beta11s.tail2a beta11s.tail2b beta11s.tail2c beta11s.tail2d beta11s.tail2e beta11clean.tail3d beta11clean.tail3e beta11clean.tail3f beta11clean.tail3g beta11clean.tail3h /tmp/beta11parts/
+# Rebuild the exact beta.11 text runtime from byte-verified segments.
+# Historical beta5->beta9 patch scripts are intentionally NOT executed.
+COPY beta11s.part00 beta11s.part01a beta11s.part01b beta11s.part02a beta11s.part02b beta11s.part03 beta11s.part04 beta11s.gap50a beta11s.gap50b beta11s.part06 beta11s.tail1b beta11s.tail1c beta11s.tail1d beta11s.tail1e beta11s.tail2a beta11s.tail2b beta11s.tail2c beta11s.tail2d beta11s.tail2e beta11s.tail3d beta11s.tail3e beta11s.tail3f beta11s.tail3g beta11s.tail3h /tmp/beta11parts/
 
 RUN cat \
   /tmp/beta11parts/beta11s.part00 \
-  /tmp/beta11parts/beta11clean.part01 \
-  /tmp/beta11parts/beta11clean.part02 \
+  /tmp/beta11parts/beta11s.part01a \
+  /tmp/beta11parts/beta11s.part01b \
+  /tmp/beta11parts/beta11s.part02a \
+  /tmp/beta11parts/beta11s.part02b \
   /tmp/beta11parts/beta11s.part03 \
-  /tmp/beta11parts/beta11s.tail0 \
-  /tmp/beta11parts/beta11clean.gap50a \
-  /tmp/beta11parts/beta11clean.gap50b \
-  /tmp/beta11parts/beta11clean.gap50c \
-  /tmp/beta11parts/beta11s.tail1a \
+  /tmp/beta11parts/beta11s.part04 \
+  /tmp/beta11parts/beta11s.gap50a \
+  /tmp/beta11parts/beta11s.gap50b \
+  /tmp/beta11parts/beta11s.part06 \
   /tmp/beta11parts/beta11s.tail1b \
   /tmp/beta11parts/beta11s.tail1c \
   /tmp/beta11parts/beta11s.tail1d \
@@ -24,11 +26,11 @@ RUN cat \
   /tmp/beta11parts/beta11s.tail2c \
   /tmp/beta11parts/beta11s.tail2d \
   /tmp/beta11parts/beta11s.tail2e \
-  /tmp/beta11parts/beta11clean.tail3d \
-  /tmp/beta11parts/beta11clean.tail3e \
-  /tmp/beta11parts/beta11clean.tail3f \
-  /tmp/beta11parts/beta11clean.tail3g \
-  /tmp/beta11parts/beta11clean.tail3h \
+  /tmp/beta11parts/beta11s.tail3d \
+  /tmp/beta11parts/beta11s.tail3e \
+  /tmp/beta11parts/beta11s.tail3f \
+  /tmp/beta11parts/beta11s.tail3g \
+  /tmp/beta11parts/beta11s.tail3h \
   > /tmp/beta11-runtime-text.tgz.b64 \
   && echo '5a51f0ee937922659352ecf94311935359ad983a4ad08db53d7d591420d7becc  /tmp/beta11-runtime-text.tgz.b64' | sha256sum -c - \
   && base64 -d /tmp/beta11-runtime-text.tgz.b64 > /tmp/beta11-runtime-text.tgz \
@@ -41,7 +43,7 @@ RUN cat \
   && echo 'ARTIST LIVE SHEET beta11 clean runtime verified' \
   && rm -rf /tmp/beta11parts /tmp/beta11-runtime-text.tgz.b64 /tmp/beta11-runtime-text.tgz
 
-# Stable binary assets are intentionally kept outside the text archive.
+# Stable binary assets are kept outside the text archive.
 COPY public/icons /app/public/icons
 COPY public/og-card.png /app/public/og-card.png
 
