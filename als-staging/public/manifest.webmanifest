@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "ARTIST LIVE SHEET",
+  "short_name": "LIVE SHEET",
+  "description": "セットリスト、PA・照明要望、ステージプロット、I/Oをまとめて作成できるライブ資料作成ツール。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#090f15",
+  "theme_color": "#090f15",
+  "categories": ["music", "productivity", "utilities"],
+  "icons": [{"src":"/icons/artist-live-sheet.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}],
+  "shortcuts": [{"name":"ARTIST LIVE SHEETを開く","short_name":"LIVE SHEET","url":"/","icons":[{"src":"/icons/artist-live-sheet.svg","sizes":"any","type":"image/svg+xml"}]}]
+}
