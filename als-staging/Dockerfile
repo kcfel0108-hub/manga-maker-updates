@@ -1,13 +1,19 @@
 FROM node:22-alpine
 WORKDIR /app
 COPY . .
-RUN cat ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 > /tmp/ui-assets.tgz.b64 \
+RUN apk add --no-cache python3 \
+  && cat ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 > /tmp/ui-assets.tgz.b64 \
   && base64 -d /tmp/ui-assets.tgz.b64 > /tmp/ui-assets.tgz \
   && tar -xzf /tmp/ui-assets.tgz -C public \
   && node apply-beta5-patch.mjs \
   && sed -i 's/0\.6\.0-beta\.3/0.6.0-beta.5/g' server.mjs \
   && node apply-beta6-content.mjs \
-  && rm -f /tmp/ui-assets.tgz /tmp/ui-assets.tgz.b64 ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 ui-assets.tgz.b64 _temp_part04
+  && cat beta7rt.part00 beta7rt.part01 > /tmp/beta7rt.py.gz.b64 \
+  && base64 -d /tmp/beta7rt.py.gz.b64 > /tmp/beta7rt.py.gz \
+  && gzip -dc /tmp/beta7rt.py.gz > /tmp/apply-beta7.py \
+  && python3 /tmp/apply-beta7.py \
+  && apk del python3 \
+  && rm -f /tmp/ui-assets.tgz /tmp/ui-assets.tgz.b64 /tmp/beta7rt.py.gz.b64 /tmp/beta7rt.py.gz /tmp/apply-beta7.py ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 ui-assets.tgz.b64 _temp_part04 beta7rt.part00 beta7rt.part01
 ENV ALS_PUBLIC_WEB=1
 ENV ALS_PUBLIC_PROVIDERS=itunes,wikidata
 ENV ALS_ENV=production
