@@ -1,0 +1,17 @@
+{
+  "name": "artist-live-sheet",
+  "version": "0.6.0-beta.2",
+  "private": true,
+  "type": "module",
+  "description": "ARTIST LIVE SHEET Public Beta",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check public/service-worker.js",
+    "smoke:staging": "node tools/staging-smoke.mjs",
+    "smoke:http": "node tools/http-smoke.mjs",
+    "verify:staging": "npm run check && npm run smoke:staging && npm run smoke:http"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
