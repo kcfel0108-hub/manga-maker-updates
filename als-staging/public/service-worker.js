@@ -1,4 +1,4 @@
-const CACHE='artist-live-sheet-v0.6.0-beta.4';
+const CACHE='artist-live-sheet-v0.6.0-beta.5';
 const CORE=['/','/index.html','/app.css','/equipment-catalog.js','/app.js','/manifest.webmanifest','/icons/artist-live-sheet.svg','/start.html','/privacy.html','/terms.html','/feedback.html','/feedback.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
