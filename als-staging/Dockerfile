@@ -1,4 +1,4 @@
-# beta8 free-launch hotfix build
+# beta9 unified Stage UX build
 FROM node:22-alpine
 WORKDIR /app
 COPY . .
@@ -14,8 +14,11 @@ RUN apk add --no-cache python3 \
   && gzip -dc /tmp/beta7rt.py.gz > /tmp/apply-beta7.py \
   && python3 /tmp/apply-beta7.py \
   && node apply-beta8-launch-hotfix.mjs \
+  && base64 -d apply-beta9-runtime.py.gz.b64 > /tmp/beta9.py.gz \
+  && gzip -dc /tmp/beta9.py.gz > /tmp/apply-beta9.py \
+  && python3 /tmp/apply-beta9.py \
   && apk del python3 \
-  && rm -f /tmp/ui-assets.tgz /tmp/ui-assets.tgz.b64 /tmp/beta7rt.py.gz.b64 /tmp/beta7rt.py.gz /tmp/apply-beta7.py ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 ui-assets.tgz.b64 _temp_part04 beta7rt.part00 beta7rt.part01
+  && rm -f /tmp/ui-assets.tgz /tmp/ui-assets.tgz.b64 /tmp/beta7rt.py.gz.b64 /tmp/beta7rt.py.gz /tmp/apply-beta7.py /tmp/beta9.py.gz /tmp/apply-beta9.py apply-beta9-runtime.py.gz.b64 ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 ui-assets.tgz.b64 _temp_part04 beta7rt.part00 beta7rt.part01
 ENV ALS_PUBLIC_WEB=1
 ENV ALS_PUBLIC_PROVIDERS=itunes,wikidata
 ENV ALS_ENV=production
