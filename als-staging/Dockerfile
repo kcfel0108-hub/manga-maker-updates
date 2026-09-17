@@ -12,6 +12,7 @@ RUN apk add --no-cache python3 \
   && cat beta7rt.part00 beta7rt.part01 > /tmp/beta7rt.py.gz.b64 \
   && base64 -d /tmp/beta7rt.py.gz.b64 > /tmp/beta7rt.py.gz \
   && gzip -dc /tmp/beta7rt.py.gz > /tmp/apply-beta7.py \
+  && python3 fix-beta7-equipment-anchor.py \
   && python3 /tmp/apply-beta7.py \
   && node apply-beta8-launch-hotfix.mjs \
   && base64 -d apply-beta9-runtime.py.gz.b64 > /tmp/beta9.py.gz \
