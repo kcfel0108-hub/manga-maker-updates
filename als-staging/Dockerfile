@@ -5,7 +5,8 @@ WORKDIR /app
 # Reconstruct the verified beta.11 runtime directly.
 # Historical beta patch scripts are intentionally NOT executed.
 COPY beta11s.part00 beta11s.part01 beta11s.part02 beta11s.part03 \
-     beta11s.tail0 beta11s.tail1 \
+     beta11s.tail0 \
+     beta11s.tail1a beta11s.tail1b beta11s.tail1c beta11s.tail1d beta11s.tail1e \
      beta11s.tail2a beta11s.tail2b beta11s.tail2c beta11s.tail2d beta11s.tail2e \
      beta11s.tail3 /tmp/beta11parts/
 
@@ -15,7 +16,11 @@ RUN cat \
       /tmp/beta11parts/beta11s.part02 \
       /tmp/beta11parts/beta11s.part03 \
       /tmp/beta11parts/beta11s.tail0 \
-      /tmp/beta11parts/beta11s.tail1 \
+      /tmp/beta11parts/beta11s.tail1a \
+      /tmp/beta11parts/beta11s.tail1b \
+      /tmp/beta11parts/beta11s.tail1c \
+      /tmp/beta11parts/beta11s.tail1d \
+      /tmp/beta11parts/beta11s.tail1e \
       /tmp/beta11parts/beta11s.tail2a \
       /tmp/beta11parts/beta11s.tail2b \
       /tmp/beta11parts/beta11s.tail2c \
@@ -30,10 +35,11 @@ RUN cat \
   && test -f /app/server.mjs \
   && test -f /app/public/app.js \
   && grep -q '0.6.0-beta.11' /app/server.mjs \
+  && grep -q 'Real Setup' /app/public/app.js \
   && echo 'ARTIST LIVE SHEET beta11 clean runtime verified' \
   && rm -rf /tmp/beta11parts /tmp/beta11-runtime-text.tgz.b64 /tmp/beta11-runtime-text.tgz
 
-# Binary assets are stable and stored directly in the repository.
+# Stable binary assets are stored directly in the repository.
 COPY public/icons /app/public/icons
 COPY public/og-card.png /app/public/og-card.png
 
