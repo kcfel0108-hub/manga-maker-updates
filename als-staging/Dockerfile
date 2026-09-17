@@ -1,28 +1,19 @@
-# beta9 unified Stage UX build
+# ARTIST LIVE SHEET v0.6.0-beta.11 clean runtime build
 FROM node:22-alpine
 WORKDIR /app
-COPY . .
-RUN apk add --no-cache python3 \
-  && cat ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 > /tmp/ui-assets.tgz.b64 \
-  && base64 -d /tmp/ui-assets.tgz.b64 > /tmp/ui-assets.tgz \
-  && tar -xzf /tmp/ui-assets.tgz -C public \
-  && node apply-beta5-patch.mjs \
-  && sed -i 's/0\.6\.0-beta\.3/0.6.0-beta.5/g' server.mjs \
-  && node apply-beta6-content.mjs \
-  && cat beta7rt.part00 beta7rt.part01 > /tmp/beta7rt.py.gz.b64 \
-  && base64 -d /tmp/beta7rt.py.gz.b64 > /tmp/beta7rt.py.gz \
-  && gzip -dc /tmp/beta7rt.py.gz > /tmp/apply-beta7.py \
-  && python3 fix-beta7-equipment-anchor.py \
-  && python3 /tmp/apply-beta7.py \
-  && node apply-beta8-launch-hotfix.mjs \
-  && base64 -d apply-beta9-runtime.py.gz.b64 > /tmp/beta9.py.gz \
-  && gzip -dc /tmp/beta9.py.gz > /tmp/apply-beta9.py \
-  && python3 /tmp/apply-beta9.py \
-  && apk del python3 \
-  && rm -f /tmp/ui-assets.tgz /tmp/ui-assets.tgz.b64 /tmp/beta7rt.py.gz.b64 /tmp/beta7rt.py.gz /tmp/apply-beta7.py /tmp/beta9.py.gz /tmp/apply-beta9.py apply-beta9-runtime.py.gz.b64 ui-assets.part00 ui-assets.part01 ui-assets.part02 ui-assets.part03 ui-assets.part04 ui-assets.part05 ui-assets.part06 ui-assets.part07 ui-assets.part08 ui-assets.tgz.b64 _temp_part04 beta7rt.part00 beta7rt.part01
+
+# The release runtime is already verified as a complete unit.
+# No historical beta patch chain is executed in this build.
+COPY beta11-runtime-core.tgz.b64 /tmp/beta11-runtime-core.tgz.b64
+RUN base64 -d /tmp/beta11-runtime-core.tgz.b64 > /tmp/beta11-runtime-core.tgz \
+  && tar -xzf /tmp/beta11-runtime-core.tgz -C /app \
+  && rm -f /tmp/beta11-runtime-core.tgz /tmp/beta11-runtime-core.tgz.b64
+
 ENV ALS_PUBLIC_WEB=1
 ENV ALS_PUBLIC_PROVIDERS=itunes,wikidata
 ENV ALS_ENV=production
 EXPOSE 8787
+
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD node -e "const http=require('http'); const port=process.env.PORT||8787; const r=http.get({host:'127.0.0.1',port,path:'/api/health'},x=>process.exit(x.statusCode===200?0:1)); r.on('error',()=>process.exit(1)); r.setTimeout(4000,()=>{r.destroy();process.exit(1)});"
+
 CMD ["node","server.mjs"]
