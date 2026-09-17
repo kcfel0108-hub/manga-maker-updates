@@ -1,6 +1,9 @@
 FROM node:22-alpine
 WORKDIR /app
 COPY . .
+RUN base64 -d ui-assets.tgz.b64 > /tmp/ui-assets.tgz \
+  && tar -xzf /tmp/ui-assets.tgz -C public \
+  && rm -f /tmp/ui-assets.tgz ui-assets.tgz.b64
 ENV ALS_PUBLIC_WEB=1
 ENV ALS_PUBLIC_PROVIDERS=itunes,wikidata
 ENV ALS_ENV=staging
