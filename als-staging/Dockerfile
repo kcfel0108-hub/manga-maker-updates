@@ -1,9 +1,10 @@
-# ARTIST LIVE SHEET v0.6.0-beta.11 verified clean runtime
+# ARTIST LIVE SHEET v0.6.0-beta.12 hardened clean runtime
 FROM node:22-alpine
 WORKDIR /app
 
 # Rebuild the exact beta.11 text runtime from byte-verified segments.
 # Historical beta5->beta9 patch scripts are intentionally NOT executed.
+COPY apply-beta12-hardening.mjs /app/apply-beta12-hardening.mjs
 COPY beta11s.part00 beta11s.part01a beta11s.part01b beta11s.part02a beta11s.part02b beta11s.part03 beta11s.part04 beta11s.gap50a beta11s.gap50b beta11s.part06 beta11s.tail1b beta11s.tail1c beta11s.tail1d beta11s.tail1e beta11s.tail2a beta11s.tail2b beta11s.tail2c beta11s.tail2d beta11s.tail2e beta11s.tail3d beta11s.tail3e beta11s.tail3f beta11s.tail3g beta11s.tail3h /tmp/beta11parts/
 
 RUN cat \
@@ -48,6 +49,13 @@ RUN cat \
   && grep -q "$NEW_BASE/sitemap.xml" /app/server.mjs \
   && grep -q "$NEW_BASE/" /app/public/index.html \
   && echo 'ARTIST LIVE SHEET public base URL synchronized' \
+  && node /app/apply-beta12-hardening.mjs \
+  && grep -q '0.6.0-beta.12' /app/server.mjs \
+  && grep -q 'UPSTREAM_TIMEOUT_MS' /app/server.mjs \
+  && grep -q 'Real Setup' /app/public/app.js \
+  && grep -q 'artist-live-sheet-v0.6.0-beta.12' /app/public/service-worker.js \
+  && echo 'ARTIST LIVE SHEET beta12 hardened runtime verified' \
+  && rm -f /app/apply-beta12-hardening.mjs \
   && rm -rf /tmp/beta11parts /tmp/beta11-runtime-text.tgz.b64 /tmp/beta11-runtime-text.tgz
 
 # Stable binary assets are kept outside the text archive.
