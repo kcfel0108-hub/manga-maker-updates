@@ -1,0 +1,26 @@
+name: Temporary Kotaro MC audio
+on:
+  push:
+    branches: [tmp/kotaro-mc-20261115]
+permissions:
+  contents: read
+jobs:
+  audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start VOICEVOX
+        run: |
+          docker pull voicevox/voicevox_engine:cpu-latest
+          docker run -d --name voicevox -p 50021:50021 voicevox/voicevox_engine:cpu-latest
+      - name: Synthesize
+        run: python3 tmp_kotaro/generate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SHIBUYA_MC_KOTARO
+          path: |
+            output/*
+            SHIBUYA_MC_KOTARO_ALL.zip
+          retention-days: 1
+          if-no-files-found: error
